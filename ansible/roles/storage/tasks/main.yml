@@ -1,0 +1,12 @@
+---
+
+- name: Mount NFS Shares
+  when: nfs_mounts is defined
+  loop: "{{ nfs_mounts }}"
+
+  ansible.posix.mount:
+    src: '{{ nfs_source_ip }}:/mnt/data/{{ item }}'
+    path: /mnt/{{ item }}
+    opts: rw,sync,hard
+    state: mounted
+    fstype: nfs
