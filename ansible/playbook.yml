@@ -1,12 +1,10 @@
 ---
-- name: Gather facts
-  gather_facts: true
+- name: Infrastructure setup
   hosts: all
-  user: "{{ ansible_user }}"
-  become: true
-  become_method: sudo
+  gather_facts: true
 
-  tasks: 
-    - name: Print hostname and OS version
-      debug:
-        msg: "Hostname: {{ ansible_hostname }} | OS: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+  roles:
+    - role: updates
+      tags: 
+        - update
+  
