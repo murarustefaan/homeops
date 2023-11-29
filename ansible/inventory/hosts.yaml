@@ -1,0 +1,52 @@
+---
+infrastructure:
+  vars:
+    ansible_python_interpreter: 'python3'
+
+  hosts:
+    stream.stefanmuraru.com:
+      ansible_host: 10.200.70.20
+      ansible_user: "{{ lookup('onepassword', 'stream.stefanmuraru.com', field='username', vault='Private') | d(omit) }}"
+      ansible_become_pass: "{{ lookup('onepassword', 'stream.stefanmuraru.com', field='password', vault='Private') | d(omit) }}"
+
+    download.stefanmuraru.com:
+      ansible_host: 10.200.70.21
+      ansible_user: "{{ lookup('onepassword', 'download.stefanmuraru.com', field='username', vault='Private') | d(omit) }}"
+      ansible_become_pass: "{{ lookup('onepassword', 'download.stefanmuraru.com', field='password', vault='Private') | d(omit) }}"
+
+    home.stefanmuraru.com:
+      ansible_host: 10.200.70.22
+      ansible_user: "{{ lookup('onepassword', 'home.stefanmuraru.com', field='username', vault='Private') | d(omit) }}"
+      ansible_become_pass: "{{ lookup('onepassword', 'home.stefanmuraru.com', field='password', vault='Private') | d(omit) }}"
+
+    www.stefanmuraru.com:
+      ansible_host: 10.200.70.23
+      ansible_user: "{{ lookup('onepassword', 'www.stefanmuraru.com', field='username', vault='Private') | d(omit) }}"
+      ansible_become_pass: "{{ lookup('onepassword', 'www.stefanmuraru.com', field='password', vault='Private') | d(omit) }}"
+
+    build.stefanmuraru.com:
+      ansible_host: 10.200.70.24
+      ansible_user: "{{ lookup('onepassword', 'build.stefanmuraru.com', field='username', vault='Private') | d(omit) }}"
+      ansible_become_pass: "{{ lookup('onepassword', 'build.stefanmuraru.com', field='password', vault='Private') | d(omit) }}"
+
+  children:
+    stream:
+      hosts:
+        stream.stefanmuraru.com:
+
+    download:
+      hosts:
+        download.stefanmuraru.com:
+
+    home:
+      hosts:
+        home.stefanmuraru.com:
+
+    www:
+      hosts:
+        www.stefanmuraru.com:
+
+    build:
+      hosts:
+        build.stefanmuraru.com:
+    
