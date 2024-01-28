@@ -4,22 +4,18 @@ metadata:
   name: istiod
 spec:
   destination:
-    name: ''
     namespace: istio-system
     server: 'https://kubernetes.default.svc'
   source:
-    path: ''
     repoURL: 'https://istio-release.storage.googleapis.com/charts'
     targetRevision: 1.20.2
     chart: istiod
     helm:
       valueFiles:
         - values.yaml
-  sources: []
   project: infrastructure
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
     automated:
       prune: true
-      selfHeal: false
