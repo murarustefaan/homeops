@@ -1,14 +1,13 @@
----
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: Gateway
 metadata:
-  name: public-gateway
+  name: gateway
   namespace: istio-public
 spec:
   gatewayClassName: istio
   listeners:
-    - name: stefanmuraru-com
-      hostname: "stefanmuraru.com"
+    - name: star-stefanmuraru-local
+      hostname: "*.stefanmuraru.local"
       port: 80
       protocol: HTTP
       allowedRoutes:
@@ -16,30 +15,6 @@ spec:
           from: All
     - name: star-stefanmuraru-com
       hostname: "*.stefanmuraru.com"
-      port: 80
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: All
-
----
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: Gateway
-metadata:
-  name: private-gateway
-  namespace: istio-public
-spec:
-  gatewayClassName: istio
-  listeners:
-    - name: stefanmuraru-local
-      hostname: "stefanmuraru.local"
-      port: 80
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: All
-    - name: star-stefanmuraru-local
-      hostname: "*.stefanmuraru.local"
       port: 80
       protocol: HTTP
       allowedRoutes:
