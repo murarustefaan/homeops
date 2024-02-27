@@ -1,6 +1,6 @@
 resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-  - route.yaml
+  - ingress.yaml
 
 patches:
   - target:
