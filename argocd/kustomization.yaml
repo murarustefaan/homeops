@@ -1,0 +1,62 @@
+resources:
+  - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  - route.yaml
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: argocd-server
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --insecure
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --repo-server-plaintext
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --dex-server-plaintext
+  - target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+      name: argocd-application-controller
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --repo-server-plaintext
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: argocd-repo-server
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --disable-tls=true
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: argocd-dex-server
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args
+        value: 
+          - --disable-tls=true
+
+  # Allow access to istiod
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: NetworkPolicy
+      name: argocd-redis-network-policy
+    patch: |-
+      - op: add
+        path: /spec/egress/-
+        value: 
+          ports:
+            - port: 15012
+              protocol: TCP
