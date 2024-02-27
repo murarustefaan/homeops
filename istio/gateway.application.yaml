@@ -15,6 +15,28 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: gitops-stefanmuraru-com
+      hostname: "gitops.stefanmuraru.com"
+      port: 443
+      protocol: TLS
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Passthrough
+    - name: stefanmuraru-com
+      hostname: "stefanmuraru.com"
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: star-stefanmuraru-com-tls
+            group: ''
+            kind: Secret
     - name: star-stefanmuraru-com
       hostname: "*.stefanmuraru.com"
       port: 443
@@ -26,3 +48,5 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: star-stefanmuraru-com-tls
+            group: ''
+            kind: Secret
