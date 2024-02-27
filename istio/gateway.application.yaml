@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: gateway
   namespace: istio-public
+  annotations:
+    cert-manager.io/cluster-issuer: stefanmuraru-com-issuer
 spec:
   gatewayClassName: istio
   listeners:
@@ -15,8 +17,12 @@ spec:
           from: All
     - name: star-stefanmuraru-com
       hostname: "*.stefanmuraru.com"
-      port: 80
-      protocol: HTTP
+      port: 443
+      protocol: HTTPS
       allowedRoutes:
         namespaces:
           from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: star-stefanmuraru-com-tls
