@@ -1,21 +1,13 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: Gateway
 metadata:
-  name: gateway
+  name: public-gateway
   namespace: istio-public
   annotations:
     cert-manager.io/cluster-issuer: stefanmuraru-com-issuer
 spec:
   gatewayClassName: istio
   listeners:
-    - name: star-stefanmuraru-local
-      hostname: "*.stefanmuraru.local"
-      port: 80
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: All
-
     - name: stefanmuraru-com
       hostname: "stefanmuraru.com"
       port: 443
@@ -42,3 +34,19 @@ spec:
           - name: star-stefanmuraru-com-tls
             group: ''
             kind: Secret
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: private-gateway
+  namespace: istio-public
+spec:
+  gatewayClassName: istio
+  listeners:
+    - name: star-stefanmuraru-local
+      hostname: "*.stefanmuraru.local"
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All

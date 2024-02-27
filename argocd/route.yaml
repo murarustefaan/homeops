@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: gateway
+    - name: public-gateway
       namespace: istio-public
   hostnames:
     - gitops.stefanmuraru.com
