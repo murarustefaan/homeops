@@ -1,0 +1,13 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: www
+spec:
+  replicas: 1
+  template:
+    spec:
+      repository: murarustefaan/www
+      containers:
+        - name: runner
+        - name: docker
+          image: docker:24-dind

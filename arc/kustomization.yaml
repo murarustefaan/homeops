@@ -1,0 +1,4 @@
+resources:
+  - https://github.com/actions/actions-runner-controller/releases/download/v0.22.0/actions-runner-controller.yaml
+  - secret.yaml
+  - deployment.yaml
