@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: argocd
   annotations:
-    cert-manager.io/issuer: "stefanmuraru-com-issuer"
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
 spec:
   ingressClassName: private
   tls:
