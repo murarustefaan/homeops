@@ -31,3 +31,8 @@ spec:
             storage: 10Gi
   retention: 60d
   retentionSize: 7GiB
+  
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      prometheus: monitoring
