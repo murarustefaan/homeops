@@ -14,7 +14,7 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  version: https://update.k3s.io/v1-release/channels/stable
+  channel: https://update.k3s.io/v1-release/channels/stable
 
 ---
 
@@ -37,4 +37,4 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  version: https://update.k3s.io/v1-release/channels/stable
+  channel: https://update.k3s.io/v1-release/channels/stable
