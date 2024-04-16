@@ -1,0 +1,19 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: cloudquery
+  labels:
+    app.kubernetes.io/name: cloudquery
+spec:
+  teamId: "cloudquery"
+  volume:
+    size: 10Gi
+  numberOfInstances: 2
+  users:
+    cloudquery:
+    - superuser
+    - createdb
+  databases:
+    cloudquery: cloudquery
+  postgresql:
+    version: "16"

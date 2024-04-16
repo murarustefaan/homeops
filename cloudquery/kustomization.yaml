@@ -1,0 +1,6 @@
+resources:
+  - postgresql.yaml
+  - configmap.yaml
+  - secret.yaml
+  - rbac.yaml
+  - cronjob.yaml

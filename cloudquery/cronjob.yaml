@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cloudquery
+  labels:
+    app.kubernetes.io/name: cloudquery
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: cloudquery-sa
+          containers:
+            - name: cloudquery
+              image: ghcr.io/cloudquery/cloudquery:latest
+              imagePullPolicy: IfNotPresent
+              args: ["sync", "/config/config.yml", "--log-console", "--log-format", "json"]
+              envFrom:
+                - secretRef:
+                    name: cloudquery-secret
+                - secretRef:
+                    name: cloudquery.cloudquery.credentials.postgresql.acid.zalan.do
+              env: 
+                - name: PG_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: cloudquery.cloudquery.credentials.postgresql.acid.zalan.do
+                      key: username
+                - name: PG_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: cloudquery.cloudquery.credentials.postgresql.acid.zalan.do
+                      key: password
+                - name: PG_CONNECTION_STR
+                  value: "postgresql://$(PG_USERNAME):$(PG_PASSWORD)@cloudquery.cloudquery:5432/cloudquery"
+              volumeMounts:
+              - name: config
+                mountPath: "/config"
+                readOnly: true
+          restartPolicy: Never
+          volumes:
+          - name: config
+            configMap:
+              name: cloudquery-config
+              items:
+              - key: "config"
+                path: "config.yml"
