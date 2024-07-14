@@ -1,8 +1,8 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: credentials
-data: {}
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: credentials
+#data: {}
 
 ---
 
