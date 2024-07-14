@@ -62,3 +62,23 @@ spec:
         - hosts:
             - monitoring.stefanmuraru.com
           secretName: monitoring-stefanmuraru-com-tls
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: prometheus-internal
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  datasource:
+    name: 'Prometheus - Internal'
+    type: prometheus
+    access: proxy
+    url: http://prometheus-operated:9090
+    isDefault: true
+    jsonData:
+      "tlsSkipVerify": true
+      "timeInterval": "5s"
