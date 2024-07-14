@@ -60,3 +60,13 @@ patches:
           ports:
             - port: 15012
               protocol: TCP
+
+  - target:
+      kind: ConfigMap
+      version: v1
+      name: argocd-cm
+    patch: |-
+      - op: add
+        path: '/data/kustomize.buildOptions'
+        value: '--enable-helm --load-restrictor LoadRestrictionsNone'
+
