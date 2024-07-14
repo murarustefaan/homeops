@@ -104,7 +104,7 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: dashboard-kubernetes
+  name: kubernetes-view-pods
 spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
@@ -113,4 +113,68 @@ spec:
     matchLabels:
       app.kubernetes.io/name: monitoring
   grafanaCom:
-    id: 12740
+    id: 15760
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-view-global
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 15757
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-view-namespaces
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 15758
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-system-apiserver
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 15761
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubernetes-view-nodes
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 15759
