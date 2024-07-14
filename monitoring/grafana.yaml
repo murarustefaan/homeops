@@ -90,6 +90,9 @@ kind: GrafanaDashboard
 metadata:
   name: dashboard-node-exporter
 spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
   instanceSelector:
     matchLabels:
       app.kubernetes.io/name: monitoring
@@ -103,6 +106,9 @@ kind: GrafanaDashboard
 metadata:
   name: dashboard-kubernetes
 spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
   instanceSelector:
     matchLabels:
       app.kubernetes.io/name: monitoring
