@@ -9,9 +9,11 @@ data:
       name: k8s
       path: cloudquery/k8s
       registry: cloudquery
-      version: "v6.0.11"
+      version: "v6.1.4"
       tables: ["*"]
       destinations: ["postgresql"]
+      otel_endpoint: "otel-collector.cloudquery:4318"
+      otel_endpoint_insecure: true
       spec:
         contexts: 
     ---
@@ -20,6 +22,6 @@ data:
       name: "postgresql"
       path: "cloudquery/postgresql"
       registry: "cloudquery"
-      version: "v8.0.3"
+      version: "v8.2.5"
       spec:
         connection_string: ${PG_CONNECTION_STR}
