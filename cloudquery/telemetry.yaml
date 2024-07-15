@@ -29,7 +29,7 @@ data:
     
     exporters:
       prometheusremotewrite:
-        endpoint: http://kube-prometheus-stack-prometheus:9090/push
+        endpoint: http://kube-prometheus-stack-prometheus.monitoring:9090/api/v1/write
     
     service:
       extensions: [zpages]
