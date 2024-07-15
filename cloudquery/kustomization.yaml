@@ -4,3 +4,4 @@ resources:
   - secret.yaml
   - rbac.yaml
   - cronjob.yaml
+  - telemetry.yaml
