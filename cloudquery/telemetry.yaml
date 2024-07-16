@@ -137,3 +137,23 @@ spec:
 #                path: cert.pem
 #              - key: key.pem
 #                path: key.pem
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: otel-collector
+spec:
+  ingressClassName: private
+  rules:
+    - host: cqtel.stefanmuraru.local
+      http:
+        paths:
+          - backend:
+              service:
+                name: otel-collector
+                port:
+                  number: 4318
+            path: /
+            pathType: Prefix
