@@ -63,7 +63,7 @@ defaultRules:
     kubeApiserverHistogram: true
     kubeApiserverSlos: true
     kubeControllerManager: true
-    kubelet: true
+    kubelet: false # throws duplicate series metrics
     kubeProxy: true
     kubePrometheusGeneral: true
     kubePrometheusNodeRecording: true
@@ -3691,7 +3691,7 @@ prometheus:
     ## Number of replicas of each shard to deploy for a Prometheus deployment.
     ## Number of replicas multiplied by shards is the total number of Pods created.
     ##
-    replicas: 2
+    replicas: 1
 
     ## EXPERIMENTAL: Number of shards to distribute targets onto.
     ## Number of replicas multiplied by shards is the total number of Pods created.
@@ -3769,9 +3769,9 @@ prometheus:
     ##
     resources:
       requests:
-        memory: 400Mi
-      limits:
         memory: 1Gi
+      limits:
+        memory: 2Gi
 
     ## Prometheus StorageSpec for persistent data
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/storage.md
