@@ -1,0 +1,20 @@
+controller:
+  ingressClassResource:
+    name: public
+    default: false
+    controllerValue: "k8s.io/ingress-nginx-public"
+
+  ingressClass: public
+  resources:
+    requests:
+      cpu: 100m
+      memory: 90Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetMemoryUtilizationPercentage:
+  service:
+    type: LoadBalancer
+
+revisionHistoryLimit: 3
