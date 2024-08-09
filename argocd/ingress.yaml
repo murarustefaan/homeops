@@ -4,6 +4,8 @@ metadata:
   name: argocd
   annotations:
     cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: private
   tls:
@@ -20,4 +22,4 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  number: 80
+                  number: 443
