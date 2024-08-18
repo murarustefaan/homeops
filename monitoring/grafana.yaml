@@ -194,3 +194,83 @@ spec:
       app.kubernetes.io/name: monitoring
   grafanaCom:
     id: 11310
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-sites
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 11311
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-switches
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 11312
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-gateways
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 11313
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-access-points
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 11314
+
+---
+
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-clients
+spec:
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "Prometheus - Internal"
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: monitoring
+  grafanaCom:
+    id: 11315
