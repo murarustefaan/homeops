@@ -35,7 +35,7 @@ spec:
   fleetServerRef:
     name: monitoring-fleet-server
   mode: fleet
-  policyID: eck-agent
+  policyID: d044df3c-02a0-4171-a4e7-3d45c1002fec
   daemonSet:
     podTemplate:
       spec:
