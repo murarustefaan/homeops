@@ -10,7 +10,7 @@ spec:
     namespace: monitoring
   config:
     xpack.fleet.agents.elasticsearch.hosts: [ "https://monitoring-es-http.monitoring.svc:9200" ]
-    xpack.fleet.agents.fleet_server.hosts: [ "https://monitoring-fleet-server-http.monitoring.svc:8220" ]
+    xpack.fleet.agents.fleet_server.hosts: [ "https://monitoring-fleet-server-agent-http.monitoring.svc:8220" ]
     xpack.fleet.packages:
       - name: system
         version: latest
