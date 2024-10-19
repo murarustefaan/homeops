@@ -1,0 +1,22 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: monitoring
+spec:
+  version: 8.15.3
+  nodeSets:
+    - name: master
+      count: 1
+      config:
+        node.name: 
+        node.roles: ["master", "data", "ingest"]
+      volumeClaimTemplates:
+        - metadata:
+            name: es-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 20Gi
+            storageClassName: longhorn
