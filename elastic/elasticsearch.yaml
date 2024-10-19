@@ -8,11 +8,11 @@ spec:
     - name: master
       count: 1
       config:
-        node.name: 
+        node.name:
         node.roles: ["master", "data", "ingest"]
       volumeClaimTemplates:
         - metadata:
-            name: es-data
+            name: elasticsearch-data
           spec:
             accessModes:
               - ReadWriteOnce
