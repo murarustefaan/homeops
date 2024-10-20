@@ -9,6 +9,7 @@ spec:
     name: monitoring
     namespace: monitoring
   config:
+    server.publicBaseUrl: "https://monitoring.stefanmuraru.com"
     xpack.fleet.agents.elasticsearch.hosts: [ "https://es.monitoring.stefanmuraru.com" ]
     xpack.fleet.agents.fleet_server.hosts: [ "https://fleet.monitoring.stefanmuraru.com" ]
     xpack.fleet.packages:
