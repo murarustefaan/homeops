@@ -24,3 +24,32 @@ spec:
                 name: monitoring-fleet-server-agent-http
                 port:
                   number: 8220
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-kibana
+  annotations:
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
+    external-dns.alpha.kubernetes.io/hostname: monitoring.stefanmuraru.com
+spec:
+  ingressClassName: private
+  tls:
+    - hosts:
+        - monitoring.stefanmuraru.com
+      secretName: monitoring-kibana-server-tls
+  rules:
+    - host: monitoring.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-kb-http
+                port:
+                  number: 5601
