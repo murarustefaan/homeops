@@ -1,0 +1,4 @@
+resources:
+  - credentials.yaml
+  - rbac.yaml
+  - deployment.yaml
