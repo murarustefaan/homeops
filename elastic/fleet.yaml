@@ -20,6 +20,10 @@ spec:
         automountServiceAccountToken: true
         securityContext:
           runAsUser: 0
+  http:
+    service:
+      spec:
+        type: LoadBalancer
 
 ---
 
