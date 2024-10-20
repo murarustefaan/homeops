@@ -2,3 +2,4 @@ resources:
   - elasticsearch.yaml
   - kibana.yaml
   - fleet.yaml
+  - ingress.yaml

@@ -10,6 +10,17 @@ spec:
       config:
         node.roles: ["master", "data", "ingest"]
         node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 2Gi
+                limits:
+                  cpu: 500m
+                  memory: 3Gi
       volumeClaimTemplates:
         - metadata:
             name: elasticsearch-data
