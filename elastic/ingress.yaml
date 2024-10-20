@@ -53,3 +53,32 @@ spec:
                 name: monitoring-kb-http
                 port:
                   number: 5601
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-es
+  annotations:
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
+    external-dns.alpha.kubernetes.io/hostname: es.monitoring.stefanmuraru.com
+spec:
+  ingressClassName: private
+  tls:
+    - hosts:
+        - es.monitoring.stefanmuraru.com
+      secretName: monitoring-es-server-tls
+  rules:
+    - host: es.monitoring.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-es-http
+                port:
+                  number: 9200
