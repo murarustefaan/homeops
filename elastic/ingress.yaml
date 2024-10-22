@@ -82,3 +82,32 @@ spec:
                 name: monitoring-es-http
                 port:
                   number: 9200
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-apm
+  annotations:
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
+    external-dns.alpha.kubernetes.io/hostname: apm.monitoring.stefanmuraru.com
+spec:
+  ingressClassName: private
+  tls:
+    - hosts:
+        - apm.monitoring.stefanmuraru.com
+      secretName: monitoring-apm-server-tls
+  rules:
+    - host: apm.monitoring.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-apm-server-apm-http
+                port:
+                  number: 8200
