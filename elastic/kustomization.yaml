@@ -3,3 +3,4 @@ resources:
   - kibana.yaml
   - fleet.yaml
   - ingress.yaml
+  - apm.yaml
