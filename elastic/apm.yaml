@@ -4,7 +4,7 @@ metadata:
   name: monitoring-apm-server
   namespace: monitoring
 spec:
-  version: 8.15.3
+  version: 8.17.1
   count: 1
   elasticsearchRef:
     name: monitoring

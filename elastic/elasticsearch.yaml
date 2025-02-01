@@ -3,7 +3,7 @@ kind: Elasticsearch
 metadata:
   name: monitoring
 spec:
-  version: 8.15.3
+  version: 8.17.1
   nodeSets:
     - name: hot
       count: 1
