@@ -5,7 +5,7 @@ metadata:
 spec:
   version: 8.15.3
   nodeSets:
-    - name: master
+    - name: hot
       count: 1
       config:
         node.roles: ["master", "data", "ingest"]
@@ -20,7 +20,7 @@ spec:
                   memory: 2Gi
                 limits:
                   cpu: 500m
-                  memory: 3Gi
+                  memory: 4Gi
       volumeClaimTemplates:
         - metadata:
             name: elasticsearch-data
@@ -29,5 +29,31 @@ spec:
               - ReadWriteOnce
             resources:
               requests:
-                storage: 20Gi
-            storageClassName: longhorn
+                storage: 50Gi
+            storageClassName: flash
+    - name: cold
+      count: 1
+      config:
+        node.roles: ["master", "data_cold", "data_frozen"]
+        node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 2Gi
+                limits:
+                  cpu: 500m
+                  memory: 2Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 50Gi
+            storageClassName: hdd
