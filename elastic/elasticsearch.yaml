@@ -6,7 +6,7 @@ spec:
   version: 8.17.1
   nodeSets:
     - name: hot
-      count: 1
+      count: 2
       config:
         node.roles: ["master", "data", "ingest", "transform"]
         node.store.allow_mmap: false
@@ -31,29 +31,3 @@ spec:
               requests:
                 storage: 50Gi
             storageClassName: flash
-    - name: cold
-      count: 1
-      config:
-        node.roles: ["master", "data_cold", "data_frozen", "transform"]
-        node.store.allow_mmap: false
-      podTemplate:
-        spec:
-          containers:
-            - name: elasticsearch
-              resources:
-                requests:
-                  cpu: 100m
-                  memory: 2Gi
-                limits:
-                  cpu: 500m
-                  memory: 2Gi
-      volumeClaimTemplates:
-        - metadata:
-            name: elasticsearch-data
-          spec:
-            accessModes:
-              - ReadWriteOnce
-            resources:
-              requests:
-                storage: 50Gi
-            storageClassName: hdd
