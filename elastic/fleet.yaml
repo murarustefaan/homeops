@@ -4,7 +4,7 @@ metadata:
   name: monitoring-fleet-server
   namespace: monitoring
 spec:
-  version: 8.15.3
+  version: 8.17.1
   kibanaRef:
     name: monitoring
   elasticsearchRefs:
@@ -33,7 +33,7 @@ metadata:
   name: monitoring-agent
   namespace: monitoring
 spec:
-  version: 8.15.3
+  version: 8.17.1
   kibanaRef:
     name: monitoring
   fleetServerRef:
@@ -49,7 +49,7 @@ spec:
           runAsUser: 0
         containers:
           - name: agent
-            image: docker.elastic.co/beats/elastic-agent:8.15.3
+            image: docker.elastic.co/beats/elastic-agent:8.17.1
         volumes:
           - name: agent-data
             emptyDir: { }
