@@ -8,7 +8,7 @@ spec:
     - name: hot
       count: 1
       config:
-        node.roles: ["master", "data", "ingest"]
+        node.roles: ["master", "data", "ingest", "transform"]
         node.store.allow_mmap: false
       podTemplate:
         spec:
@@ -34,7 +34,7 @@ spec:
     - name: cold
       count: 1
       config:
-        node.roles: ["master", "data_cold", "data_frozen"]
+        node.roles: ["master", "data_cold", "data_frozen", "transform"]
         node.store.allow_mmap: false
       podTemplate:
         spec:
