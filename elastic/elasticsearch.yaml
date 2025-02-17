@@ -3,38 +3,12 @@ kind: Elasticsearch
 metadata:
   name: monitoring
 spec:
-  version: 8.17.1
+  version: 8.17.2
   nodeSets:
-    - name: hot
-      count: 1
+    - name: cold
+      count: 2
       config:
         node.roles: ["master", "data", "ingest", "transform"]
-        node.store.allow_mmap: false
-      podTemplate:
-        spec:
-          containers:
-            - name: elasticsearch
-              resources:
-                requests:
-                  cpu: 100m
-                  memory: 2Gi
-                limits:
-                  cpu: 500m
-                  memory: 4Gi
-      volumeClaimTemplates:
-        - metadata:
-            name: elasticsearch-data
-          spec:
-            accessModes:
-              - ReadWriteOnce
-            resources:
-              requests:
-                storage: 50Gi
-            storageClassName: flash
-    - name: cold
-      count: 1
-      config:
-        node.roles: ["master", "data", "transform"]
         node.store.allow_mmap: false
       podTemplate:
         spec:
