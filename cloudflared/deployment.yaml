@@ -8,13 +8,6 @@ spec:
     matchLabels:
       stefanmuraru.com/service: cloudflared
   template:
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerm:
-            matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
     metadata:
       labels:
         stefanmuraru.com/service: cloudflared
