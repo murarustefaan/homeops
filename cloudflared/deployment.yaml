@@ -1,14 +1,20 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: cloudflared
 spec:
   selector:
     matchLabels:
       stefanmuraru.com/service: cloudflared
-  replicas: 2
   template:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerm:
+            matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
     metadata:
       labels:
         stefanmuraru.com/service: cloudflared
@@ -19,8 +25,6 @@ spec:
           args:
             - tunnel
             - --no-autoupdate
-#            - --config
-#            - /etc/cloudflared/config/config.yaml
             - run
             - --token
             - $(CLOUDFLARE_TOKEN)
@@ -36,25 +40,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: cloudflared-credentials
-                  key: credentials.json
-          volumeMounts:
-#            - name: config
-#              mountPath: /etc/cloudflared/config
-#              readOnly: true
-            - name: creds
-              mountPath: /etc/cloudflared/creds
-              readOnly: true
+                  key: token
       volumes:
-        - name: creds
+        - name: cloudflared-credentials
           secret:
             secretName: cloudflared-credentials
             items:
-              - key: credentials.json
-                path: credentials.json
-        # Create a config.yaml file from the ConfigMap below.
-#        - name: config
-#          configMap:
-#            name: cloudflared
-#            items:
-#              - key: config.yaml
-#                path: config.yaml
+              - key: token
+                path: token
