@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: n8n
+  annotations:
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+#    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+#    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    external-dns.alpha.kubernetes.io/hostname: auto.stefanmuraru.com
+spec:
+  ingressClassName: private
+  tls:
+    - hosts:
+        - auto.stefanmuraru.com
+      secretName: n8n-server-tls
+  rules:
+    - host: auto.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: n8n
+                port:
+                  number: 5678

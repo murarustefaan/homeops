@@ -2,5 +2,9 @@ namespace: n8n
 
 resources:
   - postgresql.yaml
+  - volume.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
 
 patches: []
