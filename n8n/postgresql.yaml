@@ -1,0 +1,26 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: n8n
+spec:
+  numberOfInstances: 2
+  postgresql:
+    version: "17"
+
+  teamId: n8n
+  users:
+    n8n: []
+  databases:
+    n8n: n8n
+
+  volume:
+    size: 10Gi
+    storageClass: zoom
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi

@@ -1,0 +1,6 @@
+namespace: n8n
+
+resources:
+  - postgresql.yaml
+
+patches: []
