@@ -7,6 +7,9 @@ spec:
   postgresql:
     version: "17"
 
+  enableMasterLoadBalancer: true
+  enableReplicaLoadBalancer: true
+
   teamId: n8n
   users:
     n8n: []
