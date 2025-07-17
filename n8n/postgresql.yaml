@@ -7,14 +7,13 @@ spec:
   postgresql:
     version: "17"
 
-  enableMasterLoadBalancer: true
-  enableReplicaLoadBalancer: true
-
   teamId: n8n
   users:
-    n8n: []
+    application:
+      - createdb
+      - superuser
   databases:
-    n8n: n8n
+    data: application
 
   volume:
     size: 10Gi

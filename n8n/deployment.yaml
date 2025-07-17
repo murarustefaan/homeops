@@ -37,16 +37,16 @@ spec:
             - name: DB_POSTGRESDB_PORT
               value: "5432"
             - name: DB_POSTGRESDB_DATABASE
-              value: n8n
+              value: data
             - name: DB_POSTGRESDB_USER
               valueFrom:
                 secretKeyRef:
-                  name: n8n.n8n.credentials.postgresql.acid.zalan.do
+                  name: postgres.n8n.credentials.postgresql.acid.zalan.do
                   key: username
             - name: DB_POSTGRESDB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: n8n.n8n.credentials.postgresql.acid.zalan.do
+                  name: postgres.n8n.credentials.postgresql.acid.zalan.do
                   key: password
             - name: N8N_PROTOCOL
               value: http
