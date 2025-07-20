@@ -30,6 +30,8 @@ spec:
             - -c
             - sleep 5; n8n start
           env:
+            - name: N8N_RUNNERS_ENABLED
+              value: "true"
             - name: DB_TYPE
               value: postgresdb
             - name: DB_POSTGRESDB_HOST
