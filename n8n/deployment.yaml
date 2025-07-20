@@ -41,17 +41,21 @@ spec:
             - name: DB_POSTGRESDB_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres.n8n.credentials.postgresql.acid.zalan.do
+                  name: application.n8n.credentials.postgresql.acid.zalan.do
                   key: username
             - name: DB_POSTGRESDB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres.n8n.credentials.postgresql.acid.zalan.do
+                  name: application.n8n.credentials.postgresql.acid.zalan.do
                   key: password
             - name: N8N_PROTOCOL
               value: http
             - name: N8N_PORT
               value: "5678"
+            - name: DB_POSTGRESDB_SSL_ENABLED
+              value: "true"
+            - name: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
+              value: "false"
           image: n8nio/n8n
           name: n8n
           ports:
