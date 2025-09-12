@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-secrets-operator
+  namespace: argocd
+spec:
+  destination:
+    name: in-cluster
+    namespace: elastic-operator
+  ignoreDifferences: []
+  project: infrastructure
+  source:
+    chart: external-secrets
+    helm:
+      valueFiles:
+        - values.yaml
+    repoURL: https://charts.external-secrets.io
+    targetRevision: 0.19.2
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true
