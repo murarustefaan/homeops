@@ -1,0 +1,36 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: authentik-data
+spec:
+  numberOfInstances: 2
+  postgresql:
+    version: "17"
+    parameters:
+      max_connections: "100"
+
+  teamId: authentik
+  users:
+    authentik:
+      - createdb
+      - superuser
+
+  databases:
+    data: authentik
+
+  volume:
+    size: 10Gi
+    storageClass: zoom
+
+  patroni:
+    pg_hba:
+      - hostssl all all 0.0.0.0/0 md5
+      - host all all 0.0.0.0/0 md5
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi
