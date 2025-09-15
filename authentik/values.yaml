@@ -6,7 +6,7 @@ redis:
   architecture: standalone
   auth:
     enabled: true
-    password: ""
+    existingSecret: authentik-creds
   master:
     persistence:
       enabled: true
@@ -61,6 +61,17 @@ server:
     limits:
       cpu: 1000m
       memory: 1Gi
+  env:
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-credentials
+          key: password
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-credentials
+          key: secret_key
 
 worker:
   replicas: 1
@@ -71,6 +82,17 @@ worker:
     limits:
       cpu: 500m
       memory: 512Mi
+  env:
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-creds
+          key: password
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-creds
+          key: secret_key
 
 volumes:
   media:

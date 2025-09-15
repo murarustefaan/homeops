@@ -1,50 +1,14 @@
 namespace: authentik
 
 resources:
+  - deploy.app.yaml
   - postgresql.yaml
-
-helmCharts:
-  - name: authentik
-    repo: https://charts.goauthentik.io
-    version: 2025.8.1
-    releaseName: authentik
-    namespace: authentik
-    valuesFile: values.yaml
+  - secret.yaml
 
 secretGenerator:
-  - name: authentik-secrets
+  - name: authentik-secret
     literals:
-      - AUTHENTIK_SECRET_KEY=your-secret-key-change-this-to-something-long-and-random-50-chars
-    options:
-      disableNameSuffixHash: true
-
-  - name: redis-secrets
-    literals:
-      - REDIS_PASSWORD=your-redis-password-change-this-32-chars
-    options:
-      disableNameSuffixHash: true
-
-  - name: email-secrets
-    literals:
-      - EMAIL_PASSWORD=your-email-app-password-here
-    options:
-      disableNameSuffixHash: true
-
-patches:
-  - target:
-      group: apps
-      version: v1
-      kind: Deployment
-      name: authentik-server
-    path: deployment-secret-patch.yaml
-  - target:
-      group: apps
-      version: v1
-      kind: Deployment
-      name: authentik-worker
-    path: deployment-secret-patch.yaml
-
-labels:
-  - pairs:
-      app.kubernetes.io/name: authentik
-      app.kubernetes.io/part-of: authentik
+      - password=
+      - postgres-password=
+      - secret_key=
+    type: Opaque

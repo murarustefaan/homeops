@@ -1,27 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik-core
 spec:
-  template:
-    spec:
-      containers:
-        - name: authentik
-          env:
-            - name: AUTHENTIK_DATA__PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: authentik.authentik-data.credentials.postgresql.acid.zalan.do
-                  key: password
-            - name: AUTHENTIK_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: authentik-secrets
-                  key: AUTHENTIK_SECRET_KEY
-            - name: AUTHENTIK_REDIS__PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-secrets
-                  key: REDIS_PASSWORD
-            - name: AUTHENTIK_EMAIL__PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: email-secrets
-                  key: EMAIL_PASSWORD
-                  optional: true
+  destination:
+    namespace: authentik
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://charts.goauthentik.io'
+    targetRevision: 2025.8.1
+    chart: authentik
+    helm:
+      valueFiles:
+        - values.yaml
+  project: infrastructure
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
