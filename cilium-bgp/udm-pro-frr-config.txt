@@ -1,0 +1,12 @@
+router bgp 65510
+ bgp bestpath as-path multipath-relax
+ no bgp ebgp-requires-policy
+ bgp router-id 10.0.0.1
+ neighbor flipper peer-group
+ neighbor flipper remote-as external
+ neighbor 10.0.4.7 peer-group flipper
+ neighbor 10.0.4.7 description flipper-04-stefanmuraru-local
+ neighbor 10.0.4.26 peer-group flipper
+ neighbor 10.0.4.26 description flipper-01-stefanmuraru-local
+ neighbor 10.0.4.27 peer-group flipper
+ neighbor 10.0.4.27 description flipper-03-stefanmuraru-local
