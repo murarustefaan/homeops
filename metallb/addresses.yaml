@@ -1,7 +1,0 @@
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: internal-addresses
-spec:
-  addresses:
-    - 10.0.7.64-10.0.7.254
