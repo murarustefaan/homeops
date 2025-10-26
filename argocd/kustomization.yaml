@@ -1,3 +1,3 @@
 resources:
-  - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/refs/heads/master/manifests/ha/install.yaml
   - ingress.yaml
