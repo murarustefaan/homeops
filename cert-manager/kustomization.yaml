@@ -1,5 +1,7 @@
+namespace: cert-manager
+
 resources:
   - https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
   - cluster-issuer.yaml
-  - secret.yaml
+  - external-secret.yaml
   - monitoring.yaml
