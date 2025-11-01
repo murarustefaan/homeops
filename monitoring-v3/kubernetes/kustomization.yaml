@@ -9,3 +9,4 @@ resources:
   - node-exporter.yaml
   - servicemonitors.yaml
   - grafana-datasource.yaml
+  - dashboards.yaml
