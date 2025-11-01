@@ -39,6 +39,9 @@ spec:
   serviceMonitorNamespaceSelector: {}
   podMonitorNamespaceSelector: {}
 
+  externalLabels:
+    cluster: flipper
+
   portName: web
 ---
 apiVersion: v1
