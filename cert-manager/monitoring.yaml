@@ -40,6 +40,7 @@ spec:
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
+  allowCrossNamespaceImport: true
   grafanaCom:
     id: 22184
     revision: 3
