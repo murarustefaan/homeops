@@ -1,0 +1,54 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+spec:
+  version: v3.7.3
+  replicas: 2
+  retention: 30d
+  retentionSize: 40GB
+
+  securityContext:
+    runAsUser: 1000
+    runAsNonRoot: true
+    fsGroup: 2000
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 2Gi
+    limits:
+      cpu: 1000m
+      memory: 4Gi
+
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: zoom
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+
+  serviceMonitorSelector: {}
+  podMonitorSelector: {}
+  probeSelector: {}
+
+  serviceMonitorNamespaceSelector: {}
+  podMonitorNamespaceSelector: {}
+
+  portName: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+spec:
+  type: ClusterIP
+  ports:
+    - name: web
+      port: 9090
+      targetPort: web
+  selector:
+    prometheus: prometheus
