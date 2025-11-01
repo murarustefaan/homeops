@@ -6,6 +6,8 @@ spec:
   config:
     log:
       mode: "console"
+    server:
+      root_url: "https://monitoring.stefanmuraru.com"
     auth:
       disable_login_form: "true"
     auth.generic_oauth:
@@ -30,7 +32,7 @@ spec:
               image: grafana/grafana:12.2.1
               envFrom:
                 - secretRef:
-                    name: grafana-admin-credentials
+                    name: grafana-external-credentials
 ---
 apiVersion: v1
 kind: Service
