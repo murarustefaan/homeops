@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  annotations:
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+    external-dns.alpha.kubernetes.io/hostname: monitoring.stefanmuraru.com
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: private
+  tls:
+    - hosts:
+        - monitoring.stefanmuraru.com
+      secretName: grafana-tls
+  rules:
+    - host: monitoring.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000
