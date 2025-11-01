@@ -1,5 +1,5 @@
 resources:
-  - https://github.com/grafana/grafana-operator/releases/latest/download/kustomize-cluster_scoped.yaml
+  - https://github.com/grafana/grafana-operator/releases/download/v5.20.0/kustomize-cluster_scoped.yaml
 
 patches:
   - patch: |-
