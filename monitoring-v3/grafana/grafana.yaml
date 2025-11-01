@@ -7,10 +7,22 @@ spec:
     log:
       mode: "console"
     auth:
-      disable_login_form: "false"
+      disable_login_form: "true"
+    auth.generic_oauth:
+      enabled: "true"
+      name: "OAuth"
+      allow_sign_up: "true"
+      client_id: "${GF_OAUTH_CLIENT_ID}"
+      client_secret: "${GF_OAUTH_CLIENT_SECRET}"
+      auth_url: "https://${GF_OAUTH_DOMAIN}/authorize"
+      token_url: "https://${GF_OAUTH_DOMAIN}/oauth/token"
+      api_url: "https://${GF_OAUTH_DOMAIN}/userinfo"
+      use_pkce: "true"
+      use_refresh_token: "true"
+      scopes: "openid profile email offline_access"
   deployment:
     spec:
-      replicas: 1
+      replicas: 2
       template:
         spec:
           containers:
