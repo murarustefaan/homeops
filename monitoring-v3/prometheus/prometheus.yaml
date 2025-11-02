@@ -42,6 +42,10 @@ spec:
   externalLabels:
     cluster: flipper
 
+  additionalScrapeConfigs:
+    name: external-scrape-configs
+    key: configs.yaml
+
   portName: web
 ---
 apiVersion: v1
