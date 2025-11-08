@@ -4,7 +4,11 @@ metadata:
   name: external-scrape-configs
 stringData:
   configs.yaml: |
-    - job_name: 'external-vms'
+    - job_name: 'external-vms-node-exporter'
       http_sd_configs:
-        - url: 'http://network-prometheus-sd.monitoring.svc.cluster.local:8080/targets'
+        - url: 'http://network-node-exporter-prometheus-sd.monitoring.svc.cluster.local:8080/targets'
+          refresh_interval: 30s
+    - job_name: 'external-vms-nvidia-dcgm'
+      http_sd_configs:
+        - url: 'http://network-nvidia-dcgm-prometheus-sd.monitoring.svc.cluster.local:8080/targets'
           refresh_interval: 30s
