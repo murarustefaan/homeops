@@ -6,3 +6,4 @@ namespace: monitoring
 resources:
   - prometheus.yaml
   - external-targets.yaml
+  - ingress.yaml
