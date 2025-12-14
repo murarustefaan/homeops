@@ -47,6 +47,7 @@ spec:
     key: configs.yaml
 
   portName: web
+  enableRemoteWriteReceiver: true
 ---
 apiVersion: v1
 kind: Service
