@@ -4,10 +4,10 @@ metadata:
   name: prometheus
 spec:
   serviceAccountName: prometheus
-  version: v3.8.0
-  replicas: 2
+  version: v3.9.1
+  replicas: 1
   retention: 30d
-  retentionSize: 40GB
+  retentionSize: 80GB
 
   securityContext:
     runAsUser: 1000
@@ -30,7 +30,7 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 100Gi
 
   serviceMonitorSelector: {}
   podMonitorSelector: {}
