@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud-helm
+  namespace: argocd
+spec:
+  destination:
+    namespace: nextcloud
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/murarustefaan/homeops.git'
+      targetRevision: HEAD
+      ref: values
+    - repoURL: 'https://nextcloud.github.io/helm/'
+      targetRevision: 8.9.1
+      chart: nextcloud
+      helm:
+        valueFiles:
+          - $values/nextcloud/values.yaml
+  project: infrastructure
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true

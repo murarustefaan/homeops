@@ -1,0 +1,4 @@
+resources:
+  - postgresql.yaml
+  - secret.yaml
+  - helm.app.yaml
