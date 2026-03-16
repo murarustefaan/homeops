@@ -2,6 +2,7 @@ namespace: n8n
 
 resources:
   - postgresql.yaml
+  - secret.yaml
   - volume.yaml
   - deployment.yaml
   - service.yaml

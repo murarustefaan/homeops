@@ -24,6 +24,17 @@ spec:
           volumeMounts:
             - name: n8n-claim0
               mountPath: /data
+        - name: oidc-hooks
+          image: alpine:3.21
+          command:
+            - sh
+            - -c
+            - |
+              apk add --no-cache curl &&
+              curl -fsSL https://raw.githubusercontent.com/cweagans/n8n-oidc/main/hooks.js -o /opt/n8n-oidc/hooks.js
+          volumeMounts:
+            - name: oidc-hooks
+              mountPath: /opt/n8n-oidc
       containers:
         - command:
             - /bin/sh
@@ -31,8 +42,7 @@ spec:
             - -c
             - sleep 5; n8n start
           env:
-            - name: N8N_RUNNERS_ENABLED
-              value: "true"
+            # Database
             - name: DB_TYPE
               value: postgresdb
             - name: DB_POSTGRESDB_HOST
@@ -51,14 +61,51 @@ spec:
                 secretKeyRef:
                   name: application.n8n.credentials.postgresql.acid.zalan.do
                   key: password
-            - name: N8N_PROTOCOL
-              value: http
-            - name: N8N_PORT
-              value: "5678"
             - name: DB_POSTGRESDB_SSL_ENABLED
               value: "true"
             - name: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
               value: "false"
+            # n8n core
+            - name: N8N_PROTOCOL
+              value: http
+            - name: N8N_PORT
+              value: "5678"
+            - name: N8N_HOST
+              value: auto.stefanmuraru.com
+            - name: N8N_EDITOR_BASE_URL
+              value: https://auto.stefanmuraru.com
+            - name: WEBHOOK_URL
+              value: https://auto.stefanmuraru.com/
+            - name: N8N_RUNNERS_ENABLED
+              value: "true"
+            - name: N8N_TRUST_PROXY
+              value: "1"
+            - name: N8N_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-credentials
+                  key: encryption_key
+            # OIDC (n8n-oidc community hooks)
+            - name: EXTERNAL_HOOK_FILES
+              value: /opt/n8n-oidc/hooks.js
+            - name: EXTERNAL_FRONTEND_HOOKS_URLS
+              value: /assets/oidc-frontend-hook.js
+            - name: N8N_ADDITIONAL_NON_UI_ROUTES
+              value: auth
+            - name: OIDC_ISSUER_URL
+              value: https://auth.stefanmuraru.com/application/o/n8n/
+            - name: OIDC_REDIRECT_URI
+              value: https://auto.stefanmuraru.com/auth/oidc/callback
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-credentials
+                  key: oidc_client_id
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-credentials
+                  key: oidc_client_secret
           image: n8nio/n8n
           name: n8n
           ports:
@@ -73,8 +120,13 @@ spec:
           volumeMounts:
             - mountPath: /home/node/.n8n
               name: n8n-claim0
+            - mountPath: /opt/n8n-oidc
+              name: oidc-hooks
+              readOnly: true
       restartPolicy: Always
       volumes:
         - name: n8n-claim0
           persistentVolumeClaim:
             claimName: n8n-appdata
+        - name: oidc-hooks
+          emptyDir: {}
