@@ -76,9 +76,7 @@ spec:
               value: https://auto.stefanmuraru.com
             - name: WEBHOOK_URL
               value: https://auto.stefanmuraru.com/
-            - name: N8N_RUNNERS_ENABLED
-              value: "true"
-            - name: N8N_TRUST_PROXY
+            - name: N8N_PROXY_HOPS
               value: "1"
             - name: N8N_ENCRYPTION_KEY
               valueFrom:
