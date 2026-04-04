@@ -1,6 +1,6 @@
-# Target GitHub org — runners will be available to all repos in this org.
-# Change to a specific repo URL (e.g., https://github.com/murarustefaan/www) to scope runners.
-githubConfigUrl: "https://github.com/murarustefaan"
+# Target repo for runner registration.
+# Personal accounts can't use org-level runners — must target a specific repo.
+githubConfigUrl: "https://github.com/murarustefaan/www"
 
 # Reference the ESO-managed secret containing GitHub App credentials.
 githubConfigSecret: github-app-credentials
