@@ -1,0 +1,8 @@
+namespace: registry
+
+resources:
+  - secret.yaml
+  - volume.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml

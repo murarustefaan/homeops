@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry
+  annotations:
+    cert-manager.io/cluster-issuer: "stefanmuraru-com-issuer"
+    external-dns.alpha.kubernetes.io/hostname: registry.stefanmuraru.com
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  ingressClassName: private
+  tls:
+    - hosts:
+        - registry.stefanmuraru.com
+      secretName: registry-server-tls
+  rules:
+    - host: registry.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: registry
+                port:
+                  number: 5000
