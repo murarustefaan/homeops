@@ -44,6 +44,12 @@ spec:
                 secretKeyRef:
                   name: registry-credentials
                   key: http_secret
+            - name: REGISTRY_LOG_FORMATTER
+              value: "json"
+            - name: REGISTRY_LOG_LEVEL
+              value: "info"
+            - name: OTEL_SDK_DISABLED
+              value: "true"
             - name: REGISTRY_STORAGE_DELETE_ENABLED
               value: "true"
             - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
