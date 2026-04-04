@@ -7,6 +7,10 @@ githubConfigSecret: github-app-credentials
 
 runnerScaleSetName: "worker"
 
+controllerServiceAccount:
+  name: arc-controller-gha-rs-controller
+  namespace: actions
+
 maxRunners: 5
 minRunners: 0
 
