@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    service: actions-cache-server
+  name: actions-cache-data
+spec:
+  storageClassName: zoom
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: actions-cache-server
+  name: actions-cache-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: actions-cache-server
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        service: actions-cache-server
+    spec:
+      containers:
+        - name: cache-server
+          image: ghcr.io/falcondev-oss/github-actions-cache-server:v9.4.3
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API_BASE_URL
+              value: "http://actions-cache-server.actions.svc.cluster.local:3000/"
+            - name: STORAGE_DRIVER
+              value: "filesystem"
+            - name: STORAGE_FILESYSTEM_PATH
+              value: "/data/cache"
+            - name: DB_DRIVER
+              value: "sqlite"
+            - name: DB_SQLITE_PATH
+              value: "/data/cache-server.db"
+            - name: CACHE_CLEANUP_OLDER_THAN_DAYS
+              value: "30"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: cache-data
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: cache-data
+          persistentVolumeClaim:
+            claimName: actions-cache-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: actions-cache-server
+  name: actions-cache-server
+spec:
+  type: ClusterIP
+  ports:
+    - name: "3000"
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    service: actions-cache-server

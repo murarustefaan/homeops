@@ -1,0 +1,7 @@
+namespace: actions
+
+resources:
+  - secret.yaml
+  - buildkit-amd64.yaml
+  - buildkit-arm64.yaml
+  - cache-server.yaml

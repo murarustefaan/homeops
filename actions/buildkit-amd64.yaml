@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    service: buildkit-amd64
+  name: buildkit-amd64
+spec:
+  serviceName: buildkit-amd64
+  replicas: 1
+  selector:
+    matchLabels:
+      service: buildkit-amd64
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        service: buildkit-amd64
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: buildkitd
+          image: moby/buildkit:v0.29.0
+          args:
+            - --addr
+            - tcp://0.0.0.0:1234
+            - --oci-worker-no-process-sandbox
+          ports:
+            - containerPort: 1234
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "4"
+              memory: "4Gi"
+          volumeMounts:
+            - name: buildkit-cache
+              mountPath: /var/lib/buildkit
+            - name: registry-auth
+              mountPath: /home/user/.docker
+              readOnly: true
+          readinessProbe:
+            exec:
+              command:
+                - buildctl
+                - debug
+                - workers
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          livenessProbe:
+            exec:
+              command:
+                - buildctl
+                - debug
+                - workers
+            initialDelaySeconds: 5
+            periodSeconds: 30
+      volumes:
+        - name: registry-auth
+          secret:
+            secretName: buildkit-registry-auth
+            items:
+              - key: config.json
+                path: config.json
+  volumeClaimTemplates:
+    - metadata:
+        name: buildkit-cache
+      spec:
+        storageClassName: flash
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: buildkit-amd64
+  name: buildkit-amd64
+spec:
+  type: ClusterIP
+  ports:
+    - name: buildkit
+      port: 1234
+      targetPort: 1234
+      protocol: TCP
+  selector:
+    service: buildkit-amd64

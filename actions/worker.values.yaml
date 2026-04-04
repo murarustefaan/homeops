@@ -1,0 +1,33 @@
+# Target GitHub org — runners will be available to all repos in this org.
+# Change to a specific repo URL (e.g., https://github.com/murarustefaan/www) to scope runners.
+githubConfigUrl: "https://github.com/murarustefaan"
+
+# Reference the ESO-managed secret containing GitHub App credentials.
+githubConfigSecret: github-app-credentials
+
+runnerScaleSetName: "worker"
+
+maxRunners: 5
+minRunners: 0
+
+# No containerMode — runners are lightweight, no Docker daemon.
+# Builds are offloaded to the remote Buildkit instances.
+
+template:
+  spec:
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    containers:
+      - name: runner
+        image: ghcr.io/actions/actions-runner:latest
+        command: ["/home/runner/run.sh"]
+        env:
+          - name: ACTIONS_CACHE_URL
+            value: "http://actions-cache-server.actions.svc.cluster.local:3000/"
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
