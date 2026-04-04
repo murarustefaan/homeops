@@ -39,6 +39,11 @@ spec:
               value: Registry Realm
             - name: REGISTRY_AUTH_HTPASSWD_PATH
               value: /auth/htpasswd
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: registry-credentials
+                  key: http_secret
             - name: REGISTRY_STORAGE_DELETE_ENABLED
               value: "true"
             - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
