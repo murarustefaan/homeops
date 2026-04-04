@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: cache-server
-          image: ghcr.io/falcondev-oss/github-actions-cache-server:v9.4.3
+          image: ghcr.io/falcondev-oss/github-actions-cache-server:9.4.3
           ports:
             - containerPort: 3000
           env:

@@ -24,7 +24,6 @@ spec:
           args:
             - --addr
             - tcp://0.0.0.0:1234
-            - --oci-worker-no-process-sandbox
           ports:
             - containerPort: 1234
           securityContext:
@@ -46,6 +45,8 @@ spec:
             exec:
               command:
                 - buildctl
+                - --addr
+                - tcp://localhost:1234
                 - debug
                 - workers
             initialDelaySeconds: 5
@@ -54,6 +55,8 @@ spec:
             exec:
               command:
                 - buildctl
+                - --addr
+                - tcp://localhost:1234
                 - debug
                 - workers
             initialDelaySeconds: 5
