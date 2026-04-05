@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: buildkite
+  namespace: argocd
+spec:
+  destination:
+    namespace: buildkite
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/buildkite/agent-stack-k8s.git'
+      targetRevision: v0.40.0
+      path: charts/agent-stack-k8s
+      helm:
+        valueFiles:
+          - $values/buildkite/agent-stack.values.yaml
+    - repoURL: 'https://github.com/murarustefaan/homeops.git'
+      targetRevision: HEAD
+      ref: values
+    - repoURL: 'https://github.com/murarustefaan/homeops.git'
+      targetRevision: HEAD
+      path: buildkite/secrets
+  project: infrastructure
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true

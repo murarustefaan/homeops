@@ -1,0 +1,15 @@
+agentStackSecret: buildkite-agent-token
+image: ghcr.io/buildkite/agent-stack-k8s/controller:0.40.0
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+config:
+  image: buildkite/agent:3
+  default-checkout-params:
+    skip: false
