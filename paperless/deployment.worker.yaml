@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: paperless-worker
+  name: paperless-worker
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      service: paperless-worker
+  template:
+    metadata:
+      labels:
+        service: paperless-worker
+    spec:
+      enableServiceLinks: false
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    service: paperless-worker
+      containers:
+        - name: worker
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.14
+          # Skip s6 init — web pod owns migrations, OCR lang install, superuser.
+          # Override to run only the celery worker loop. Entrypoint handles uid drop.
+          command:
+            - bash
+            - -c
+            - |
+              cd /usr/src/paperless/src &&
+              exec celery --app paperless worker --loglevel INFO \
+                --concurrency ${PAPERLESS_TASK_WORKERS}
+          env:
+            # Database (Zalando-managed)
+            - name: PAPERLESS_DBENGINE
+              value: postgresql
+            - name: PAPERLESS_DBHOST
+              value: paperless-data
+            - name: PAPERLESS_DBPORT
+              value: "5432"
+            - name: PAPERLESS_DBNAME
+              value: data
+            - name: PAPERLESS_DBSSLMODE
+              value: prefer
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: paperless.paperless-data.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless.paperless-data.credentials.postgresql.acid.zalan.do
+                  key: password
+            # Broker
+            - name: KEYDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: keydb_password
+            - name: PAPERLESS_REDIS
+              value: redis://:$(KEYDB_PASSWORD)@paperless-keydb:6379
+            # Parsers
+            - name: PAPERLESS_TIKA_ENABLED
+              value: "true"
+            - name: PAPERLESS_TIKA_ENDPOINT
+              value: http://paperless-tika:9998
+            - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+              value: http://paperless-gotenberg:3000
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: eng+ron
+            # Security (celery needs the same key to decrypt task payloads)
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: secret_key
+            - name: PAPERLESS_TIME_ZONE
+              value: Europe/Bucharest
+            # Concurrency per pod — docs processed in parallel within one worker
+            - name: PAPERLESS_TASK_WORKERS
+              value: "3"
+            - name: PAPERLESS_THREADS_PER_WORKER
+              value: "2"
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - cd /usr/src/paperless/src && celery --app paperless inspect ping -d celery@$HOSTNAME
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "3000m"
+              memory: 3Gi
+      restartPolicy: Always
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-media
+        - name: consume
+          persistentVolumeClaim:
+            claimName: paperless-consume

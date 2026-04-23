@@ -8,6 +8,7 @@ resources:
   - tika.yaml
   - gotenberg.yaml
   - deployment.yaml
+  - deployment.worker.yaml
   - service.yaml
   - ingress.yaml
 

@@ -103,9 +103,10 @@ spec:
               value: "true"
             - name: PAPERLESS_DISABLE_REGULAR_LOGIN
               value: "true"
-            # OCR throughput
+            # In-pod celery keeps running (can't disable the s6 service cleanly)
+            # but scaled down — horizontal worker deployment does the heavy OCR.
             - name: PAPERLESS_TASK_WORKERS
-              value: "2"
+              value: "1"
             - name: PAPERLESS_THREADS_PER_WORKER
               value: "2"
           volumeMounts:
@@ -152,8 +153,8 @@ spec:
               cpu: 500m
               memory: 1Gi
             limits:
-              cpu: "4000m"
-              memory: 3Gi
+              cpu: "2000m"
+              memory: 2Gi
       restartPolicy: Always
       volumes:
         - name: data

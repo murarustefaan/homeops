@@ -5,9 +5,9 @@ metadata:
     service: paperless
   name: paperless-data
 spec:
-  storageClassName: zoom
+  storageClassName: hive
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
@@ -19,9 +19,9 @@ metadata:
     service: paperless
   name: paperless-media
 spec:
-  storageClassName: zoom
+  storageClassName: hive
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 20Gi
@@ -33,9 +33,9 @@ metadata:
     service: paperless
   name: paperless-consume
 spec:
-  storageClassName: zoom
+  storageClassName: hive
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
@@ -47,9 +47,9 @@ metadata:
     service: paperless
   name: paperless-export
 spec:
-  storageClassName: zoom
+  storageClassName: hive
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
