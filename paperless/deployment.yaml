@@ -75,6 +75,8 @@ spec:
               value: http://paperless-gotenberg:3000
             - name: PAPERLESS_OCR_LANGUAGE
               value: eng+ron
+            - name: PAPERLESS_OCR_LANGUAGES
+              value: ron
             # Security
             - name: PAPERLESS_SECRET_KEY
               valueFrom:
