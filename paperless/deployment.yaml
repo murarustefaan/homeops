@@ -102,7 +102,7 @@ spec:
             - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
               value: "true"
             - name: PAPERLESS_DISABLE_REGULAR_LOGIN
-              value: "false"
+              value: "true"
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data
@@ -112,6 +112,16 @@ spec:
               mountPath: /usr/src/paperless/consume
             - name: export
               mountPath: /usr/src/paperless/export
+          startupProbe:
+            httpGet:
+              path: /api/
+              port: 8000
+              httpHeaders:
+                - name: Host
+                  value: docs.stefanmuraru.com
+            periodSeconds: 5
+            failureThreshold: 60
+            timeoutSeconds: 3
           readinessProbe:
             httpGet:
               path: /api/
@@ -119,9 +129,9 @@ spec:
               httpHeaders:
                 - name: Host
                   value: docs.stefanmuraru.com
-            initialDelaySeconds: 60
-            periodSeconds: 15
-            timeoutSeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /api/
@@ -129,9 +139,9 @@ spec:
               httpHeaders:
                 - name: Host
                   value: docs.stefanmuraru.com
-            initialDelaySeconds: 120
             periodSeconds: 30
-            timeoutSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
               cpu: 250m
