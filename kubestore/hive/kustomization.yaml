@@ -1,0 +1,6 @@
+namespace: democratic-csi
+
+resources:
+  - externalsecret.yaml
+
+patches: []

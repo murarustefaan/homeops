@@ -1,0 +1,43 @@
+csiDriver:
+  name: "org.democratic-csi.nfs-hive"
+
+controller:
+  driver:
+    image:
+      registry: docker.io/democraticcsi/democratic-csi
+      tag: next
+      pullPolicy: Always
+    logLevel: info
+node:
+  driver:
+    enabled: true
+    image:
+      registry: docker.io/democraticcsi/democratic-csi
+      tag: next
+      pullPolicy: Always
+    logLevel: info
+
+storageClasses:
+  - name: hive
+    defaultClass: false
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    allowVolumeExpansion: true
+    parameters:
+      fsType: nfs
+    mountOptions:
+      - nfsvers=4.2
+      - noatime
+      - nodiratime
+      - nconnect=8
+    secrets:
+      provisioner-secret:
+      controller-publish-secret:
+      node-stage-secret:
+      node-publish-secret:
+      controller-expand-secret:
+
+driver:
+  existingConfigSecret: hive-driver-config
+  config:
+    driver: freenas-api-nfs

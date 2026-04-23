@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hive
+  namespace: argocd
+spec:
+  destination:
+    namespace: democratic-csi
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/murarustefaan/homeops.git'
+      targetRevision: HEAD
+      path: kubestore/hive
+      ref: repo
+    - repoURL: 'https://democratic-csi.github.io/charts/'
+      targetRevision: 0.15.1
+      chart: democratic-csi
+      helm:
+        releaseName: hive
+        valueFiles:
+          - $repo/kubestore/hive/values.yaml
+  project: infrastructure
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated:
+      prune: false
