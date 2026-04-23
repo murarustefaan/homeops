@@ -38,6 +38,9 @@ spec:
               value: https
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Bucharest
+            # Shared scratch so web can hand off uploads to workers on other nodes
+            - name: PAPERLESS_SCRATCH_DIR
+              value: /usr/src/paperless/data/scratch
             # Database (Zalando-managed)
             - name: PAPERLESS_DBENGINE
               value: postgresql

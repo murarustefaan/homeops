@@ -89,6 +89,9 @@ spec:
                   key: secret_key
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Bucharest
+            # Shared scratch so workers can read uploads staged by the web pod
+            - name: PAPERLESS_SCRATCH_DIR
+              value: /usr/src/paperless/data/scratch
             # Concurrency per pod — docs processed in parallel within one worker
             - name: PAPERLESS_TASK_WORKERS
               value: "3"
