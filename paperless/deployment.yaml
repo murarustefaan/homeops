@@ -116,6 +116,9 @@ spec:
             httpGet:
               path: /api/
               port: 8000
+              httpHeaders:
+                - name: Host
+                  value: docs.stefanmuraru.com
             initialDelaySeconds: 60
             periodSeconds: 15
             timeoutSeconds: 5
@@ -123,6 +126,9 @@ spec:
             httpGet:
               path: /api/
               port: 8000
+              httpHeaders:
+                - name: Host
+                  value: docs.stefanmuraru.com
             initialDelaySeconds: 120
             periodSeconds: 30
             timeoutSeconds: 10
