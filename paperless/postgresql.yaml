@@ -1,0 +1,38 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: paperless-data
+  namespace: paperless
+spec:
+  numberOfInstances: 2
+  postgresql:
+    version: "18"
+    parameters:
+      max_connections: "100"
+
+  teamId: paperless
+  users:
+    paperless:
+      - createdb
+      - superuser
+
+  databases:
+    data: paperless
+
+  volume:
+    size: 5Gi
+    storageClass: zoom
+
+  patroni:
+    pg_hba:
+      - local all all trust
+      - hostssl all all 0.0.0.0/0 md5
+      - host all all 0.0.0.0/0 md5
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi

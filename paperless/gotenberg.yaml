@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: paperless-gotenberg
+  name: paperless-gotenberg
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      service: paperless-gotenberg
+  template:
+    metadata:
+      labels:
+        service: paperless-gotenberg
+    spec:
+      containers:
+        - name: gotenberg
+          image: gotenberg/gotenberg:8.31.0
+          args:
+            - "gotenberg"
+            - "--chromium-disable-javascript=true"
+            - "--chromium-allow-list=file:///tmp/.*"
+            - "--api-timeout=60s"
+          ports:
+            - containerPort: 3000
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: paperless-gotenberg
+  name: paperless-gotenberg
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    service: paperless-gotenberg

@@ -1,0 +1,24 @@
+namespace: paperless
+
+resources:
+  - postgresql.yaml
+  - secret.yaml
+  - volume.yaml
+  - keydb.yaml
+  - tika.yaml
+  - gotenberg.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+images:
+  - name: ghcr.io/paperless-ngx/paperless-ngx
+    newTag: "2.20.14"
+  - name: gotenberg/gotenberg
+    newTag: "8.31.0"
+  - name: apache/tika
+    newTag: "3.3.0.0-full"
+  - name: eqalpha/keydb
+    newTag: "alpine_x86_64_v6.3.4"
+
+patches: []

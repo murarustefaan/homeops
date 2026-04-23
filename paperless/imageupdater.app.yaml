@@ -1,0 +1,46 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: paperless
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: paperless
+      writeBackConfig:
+        method: git
+        gitConfig:
+          branch: main
+          writeBackTarget: kustomization:./paperless
+      images:
+        - alias: paperless
+          imageName: ghcr.io/paperless-ngx/paperless-ngx:2.20.14
+          commonUpdateSettings:
+            updateStrategy: semver
+            allowTags: 'regexp:^2\.\d+\.\d+$'
+          manifestTargets:
+            kustomize:
+              name: ghcr.io/paperless-ngx/paperless-ngx
+        - alias: gotenberg
+          imageName: gotenberg/gotenberg:8.31.0
+          commonUpdateSettings:
+            updateStrategy: semver
+            allowTags: 'regexp:^8\.\d+\.\d+$'
+          manifestTargets:
+            kustomize:
+              name: gotenberg/gotenberg
+        - alias: tika
+          imageName: apache/tika:3.3.0.0-full
+          commonUpdateSettings:
+            updateStrategy: semver
+            allowTags: 'regexp:^3\.\d+\.\d+\.\d+-full$'
+          manifestTargets:
+            kustomize:
+              name: apache/tika
+        - alias: keydb
+          imageName: eqalpha/keydb:alpine_x86_64_v6.3.4
+          commonUpdateSettings:
+            updateStrategy: semver
+            allowTags: 'regexp:^alpine_x86_64_v6\.\d+\.\d+$'
+          manifestTargets:
+            kustomize:
+              name: eqalpha/keydb

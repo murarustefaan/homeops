@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: paperless
+  name: paperless
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      service: paperless
+  template:
+    metadata:
+      labels:
+        service: paperless
+    spec:
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.14
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            # URLs
+            - name: PAPERLESS_URL
+              value: https://docs.stefanmuraru.com
+            - name: PAPERLESS_ALLOWED_HOSTS
+              value: docs.stefanmuraru.com
+            - name: PAPERLESS_CORS_ALLOWED_HOSTS
+              value: https://docs.stefanmuraru.com
+            - name: PAPERLESS_USE_X_FORWARD_HOST
+              value: "true"
+            - name: PAPERLESS_ACCOUNT_DEFAULT_HTTP_PROTOCOL
+              value: https
+            - name: PAPERLESS_TIME_ZONE
+              value: Europe/Bucharest
+            # Database (Zalando-managed)
+            - name: PAPERLESS_DBENGINE
+              value: postgresql
+            - name: PAPERLESS_DBHOST
+              value: paperless-data
+            - name: PAPERLESS_DBPORT
+              value: "5432"
+            - name: PAPERLESS_DBNAME
+              value: data
+            - name: PAPERLESS_DBSSLMODE
+              value: prefer
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: paperless.paperless-data.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless.paperless-data.credentials.postgresql.acid.zalan.do
+                  key: password
+            # Broker / cache
+            - name: KEYDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: keydb_password
+            - name: PAPERLESS_REDIS
+              value: redis://:$(KEYDB_PASSWORD)@paperless-keydb:6379
+            # Parsers
+            - name: PAPERLESS_TIKA_ENABLED
+              value: "true"
+            - name: PAPERLESS_TIKA_ENDPOINT
+              value: http://paperless-tika:9998
+            - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+              value: http://paperless-gotenberg:3000
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: eng+ron
+            # Security
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: secret_key
+            - name: PAPERLESS_ADMIN_USER
+              value: admin
+            - name: PAPERLESS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: admin_password
+            # OIDC (django-allauth)
+            - name: PAPERLESS_APPS
+              value: allauth.socialaccount.providers.openid_connect
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: oidc_providers_json
+            - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
+              value: "true"
+            - name: PAPERLESS_DISABLE_REGULAR_LOGIN
+              value: "false"
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+            - name: export
+              mountPath: /usr/src/paperless/export
+          readinessProbe:
+            httpGet:
+              path: /api/
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/
+              port: 8000
+            initialDelaySeconds: 120
+            periodSeconds: 30
+            timeoutSeconds: 10
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2000m"
+              memory: 2Gi
+      restartPolicy: Always
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-media
+        - name: consume
+          persistentVolumeClaim:
+            claimName: paperless-consume
+        - name: export
+          persistentVolumeClaim:
+            claimName: paperless-export

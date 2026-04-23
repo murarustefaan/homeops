@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: paperless-tika
+  name: paperless-tika
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      service: paperless-tika
+  template:
+    metadata:
+      labels:
+        service: paperless-tika
+    spec:
+      containers:
+        - name: tika
+          image: apache/tika:3.3.0.0-full
+          ports:
+            - containerPort: 9998
+              name: tika
+          readinessProbe:
+            httpGet:
+              path: /tika
+              port: 9998
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /tika
+              port: 9998
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: paperless-tika
+  name: paperless-tika
+spec:
+  type: ClusterIP
+  ports:
+    - name: tika
+      port: 9998
+      targetPort: 9998
+      protocol: TCP
+  selector:
+    service: paperless-tika

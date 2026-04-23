@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paperless
+  annotations:
+    cert-manager.io/cluster-issuer: stefanmuraru-com-issuer
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    external-dns.alpha.kubernetes.io/hostname: docs.stefanmuraru.com
+    external-dns.alpha.kubernetes.io/target: d473da53-e5a4-4535-b3f0-6e36d165b874.cfargotunnel.com
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+spec:
+  ingressClassName: public
+  tls:
+    - hosts:
+        - docs.stefanmuraru.com
+      secretName: paperless-tls
+  rules:
+    - host: docs.stefanmuraru.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: paperless
+                port:
+                  number: 80

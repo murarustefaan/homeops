@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: paperless-keydb
+  name: paperless-keydb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      service: paperless-keydb
+  template:
+    metadata:
+      labels:
+        service: paperless-keydb
+    spec:
+      containers:
+        - name: keydb
+          image: eqalpha/keydb:alpine_x86_64_v6.3.4
+          args:
+            - "--requirepass"
+            - "$(KEYDB_PASSWORD)"
+            - "--appendonly"
+            - "yes"
+            - "--dir"
+            - "/data"
+          env:
+            - name: KEYDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-credentials
+                  key: keydb_password
+          ports:
+            - containerPort: 6379
+              name: keydb
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-keydb-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: paperless-keydb
+  name: paperless-keydb
+spec:
+  type: ClusterIP
+  ports:
+    - name: keydb
+      port: 6379
+      targetPort: 6379
+      protocol: TCP
+  selector:
+    service: paperless-keydb
