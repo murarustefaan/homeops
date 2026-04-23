@@ -26,6 +26,8 @@ spec:
   patroni:
     pg_hba:
       - local all all trust
+      - hostssl replication standby all md5
+      - host replication standby all md5
       - hostssl all all 0.0.0.0/0 md5
       - host all all 0.0.0.0/0 md5
 
