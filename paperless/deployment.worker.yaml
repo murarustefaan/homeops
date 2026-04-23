@@ -21,6 +21,22 @@ spec:
         service: paperless-worker
     spec:
       enableServiceLinks: false
+      initContainers:
+        # Workers skip s6 init, so the Romanian tesseract pack that PAPERLESS_OCR_LANGUAGES
+        # installs on the web pod never lands here. Install it manually into a shared volume.
+        - name: install-ron-tessdata
+          image: debian:trixie-slim
+          command:
+            - bash
+            - -c
+            - |
+              set -e
+              apt-get update -qq
+              apt-get install -y --no-install-recommends tesseract-ocr-ron
+              cp /usr/share/tesseract-ocr/5/tessdata/ron.traineddata /tessdata/
+          volumeMounts:
+            - name: ron-tessdata
+              mountPath: /tessdata
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -104,6 +120,10 @@ spec:
               mountPath: /usr/src/paperless/media
             - name: consume
               mountPath: /usr/src/paperless/consume
+            - name: ron-tessdata
+              mountPath: /usr/share/tesseract-ocr/5/tessdata/ron.traineddata
+              subPath: ron.traineddata
+              readOnly: true
           livenessProbe:
             exec:
               command:
@@ -132,3 +152,5 @@ spec:
         - name: consume
           persistentVolumeClaim:
             claimName: paperless-consume
+        - name: ron-tessdata
+          emptyDir: {}
