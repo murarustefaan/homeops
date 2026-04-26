@@ -10,7 +10,7 @@ resources:
   - deployment.yaml
   - deployment.worker.yaml
   - service.yaml
-  - ingress.yaml
+  - httproute.yaml
 
 images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
