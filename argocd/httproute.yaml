@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: gitops.stefanmuraru.com
+spec:
+  parentRefs:
+    - name: private
+      namespace: gateway-system
+      sectionName: https
+  hostnames:
+    - gitops.stefanmuraru.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: argocd-server
+          port: 80
