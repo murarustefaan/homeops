@@ -6,6 +6,6 @@ resources:
   - volume.yaml
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
+  - httproute.yaml
 
 patches: []
