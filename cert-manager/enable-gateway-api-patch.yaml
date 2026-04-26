@@ -1,0 +1,6 @@
+# Adds --enable-gateway-api to the cert-manager controller. Required so
+# cert-manager watches Gateway resources and provisions Secrets named in
+# their listener `tls.certificateRefs`.
+- op: add
+  path: /spec/template/spec/containers/0/args/-
+  value: --enable-gateway-api

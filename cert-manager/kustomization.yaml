@@ -5,3 +5,11 @@ resources:
   - cluster-issuer.yaml
   - external-secret.yaml
   - monitoring.yaml
+
+patches:
+  - path: enable-gateway-api-patch.yaml
+    target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: cert-manager
