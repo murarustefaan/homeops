@@ -17,11 +17,14 @@ rules:
   - apiGroups: ["networking","networking.k8s.io"]
     resources: ["ingresses"]
     verbs: ["get","watch","list"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["gateways","httproutes"]
+    verbs: ["get","watch","list"]
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get","watch","list"]
   - apiGroups: [""]
-    resources: ["endpoints"]
+    resources: ["endpoints","namespaces"]
     verbs: ["get","watch","list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
