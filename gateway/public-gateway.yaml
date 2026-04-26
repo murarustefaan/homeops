@@ -3,8 +3,6 @@ kind: Gateway
 metadata:
   name: public
   namespace: gateway-system
-  annotations:
-    cert-manager.io/cluster-issuer: stefanmuraru-com-issuer
 spec:
   gatewayClassName: cilium
   listeners:

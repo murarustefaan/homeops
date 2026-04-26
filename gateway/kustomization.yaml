@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - gatewayclass.yaml
+  - certificate.yaml
   - public-gateway.yaml
   - private-gateway.yaml

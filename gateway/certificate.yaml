@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: star-stefanmuraru-com-tls
+  namespace: gateway-system
+spec:
+  secretName: star-stefanmuraru-com-tls
+  issuerRef:
+    name: stefanmuraru-com-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - stefanmuraru.com
+    - "*.stefanmuraru.com"
