@@ -1,6 +1,58 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":timezone(Europe/Bucharest)"
+  ],
+  "schedule": ["* 2-6 * * 1"],
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 10,
+  "labels": ["renovate"],
+  "kubernetes": {
+    "fileMatch": ["\\.yaml$"]
+  },
+  "packageRules": [
+    {
+      "description": "Group non-major Kubernetes manifest URL updates",
+      "matchManagers": ["kustomize"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "kustomize manifests (non-major)"
+    },
+    {
+      "description": "Auto-merge patch updates after CI",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Major upgrades get their own PR with extra scrutiny",
+      "matchUpdateTypes": ["major"],
+      "labels": ["renovate", "major-upgrade"],
+      "automerge": false
+    },
+    {
+      "description": "Pin Kubernetes API itself manually (k3s upgrade controller handles the cluster)",
+      "matchPackageNames": ["kubernetes/kubernetes", "k3s-io/k3s"],
+      "enabled": false
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Track image tags written inline as YAML comments: # renovate: datasource=docker depName=...",
+      "customType": "regex",
+      "fileMatch": ["values\\.yaml$", "\\.values\\.yaml$"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>[^\\s]+?)(?:\\s+versioning=(?<versioning>[^\\s]+))?\\s*\\n\\s*[^:\\n]+:\\s*[\"']?(?<currentValue>[^\"'\\s]+?)[\"']?\\s*$"
+      ]
+    },
+    {
+      "description": "Track shell-style version pins in any file: # renovate: datasource=... depName=...\\nFOO_VERSION=vX.Y.Z",
+      "customType": "regex",
+      "fileMatch": [".+"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>[^\\s]+?)(?:\\s+versioning=(?<versioning>[^\\s]+))?\\s*\\n[A-Z0-9_]+\\s*=\\s*[\"']?(?<currentValue>[^\"'\\s]+?)[\"']?\\s*$"
+      ]
+    }
   ]
 }
