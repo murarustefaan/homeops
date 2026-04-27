@@ -1,5 +1,5 @@
 agentStackSecret: buildkite-agent-token
-image: ghcr.io/buildkite/agent-stack-k8s/controller:0.40.0
+image: ghcr.io/buildkite/agent-stack-k8s/controller:0.42.0
 
 resources:
   requests:
