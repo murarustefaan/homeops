@@ -11,4 +11,8 @@ data:
       credentials: pullsecret:argocd/docker-io-credentials
       default: true
       defaultns: library
+    - name: stefanmuraru
+      api_url: https://registry.stefanmuraru.com
+      prefix: registry.stefanmuraru.com
+      credentials: pullsecret:argocd/registry-stefanmuraru-com-pullsecret
   log.level: trace

@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: github-app-flipper-ci
-  namespace: buildkite
+  namespace: argocd
 spec:
   secretStoreRef:
     name: 1password-sdk
@@ -12,12 +12,12 @@ spec:
     name: github-app-flipper-ci
     creationPolicy: Owner
   data:
-    - secretKey: APP_ID
+    - secretKey: githubAppID
       remoteRef:
         key: flipper-ci/app_id
-    - secretKey: INSTALLATION_ID
+    - secretKey: githubAppInstallationID
       remoteRef:
         key: flipper-ci/installation_id
-    - secretKey: PRIVATE_KEY
+    - secretKey: githubAppPrivateKey
       remoteRef:
         key: flipper-ci/private_key
